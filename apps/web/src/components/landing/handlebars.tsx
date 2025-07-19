@@ -64,20 +64,12 @@ export function Handlebars({
     onRangeChange?.(leftHandle, rightHandle);
   }, [leftHandle, rightHandle, onRangeChange]);
 
-  const handleLeftDrag = (event: any, info: PanInfo) => {
-    const newLeft = Math.max(
-      0,
-      Math.min(leftHandle + info.offset.x, rightHandle - minWidth)
-    );
-    setLeftHandle(newLeft);
+  const handleLeftDragEnd = () => {
+    setLeftHandle(leftHandleX.get());
   };
 
-  const handleRightDrag = (event: any, info: PanInfo) => {
-    const newRight = Math.max(
-      leftHandle + minWidth,
-      Math.min(contentWidth, rightHandle + info.offset.x)
-    );
-    setRightHandle(newRight);
+  const handleRightDragEnd = () => {
+    setRightHandle(rightHandleX.get());
   };
 
   return (
@@ -105,9 +97,7 @@ export function Handlebars({
             }}
             drag="x"
             dragConstraints={{ left: 0, right: rightHandle - minWidth }}
-            dragElastic={0}
-            dragMomentum={false}
-            onDrag={handleLeftDrag}
+            onDragEnd={handleLeftDragEnd}
             whileHover={{ scale: 1.05 }}
             whileDrag={{ scale: 1.1 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
@@ -128,9 +118,7 @@ export function Handlebars({
               left: leftHandle + minWidth,
               right: contentWidth,
             }}
-            dragElastic={0}
-            dragMomentum={false}
-            onDrag={handleRightDrag}
+            onDragEnd={handleRightDragEnd}
             whileHover={{ scale: 1.05 }}
             whileDrag={{ scale: 1.1 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
