@@ -1,7 +1,9 @@
 "use client";
 
+"use client";
+
 import React, { useState, useRef, useEffect } from "react";
-import { motion, useMotionValue, useTransform, PanInfo } from "motion/react";
+import { motion, useMotionValue, useTransform } from "motion/react";
 
 interface HandlebarsProps {
   children: React.ReactNode;
@@ -25,7 +27,7 @@ export function Handlebars({
 
   const visibleWidth = useTransform(
     [leftHandleX, rightHandleX],
-    (values: number[]) => values[1] - values[0]
+    (values: number[]) => values[1] - values[0],
   );
 
   const contentLeft = useTransform(leftHandleX, (left: number) => -left);
@@ -65,11 +67,11 @@ export function Handlebars({
   }, [leftHandle, rightHandle, onRangeChange]);
 
   const handleLeftDragEnd = () => {
-    setLeftHandle(leftHandleX.get());
+    leftHandleX.set(leftHandle);
   };
 
   const handleRightDragEnd = () => {
-    setRightHandle(rightHandleX.get());
+    rightHandleX.set(rightHandle);
   };
 
   return (
@@ -96,6 +98,8 @@ export function Handlebars({
               zIndex: 10,
             }}
             drag="x"
+            dragElastic={0}
+            dragMomentum={false}
             dragConstraints={{ left: 0, right: rightHandle - minWidth }}
             onDragEnd={handleLeftDragEnd}
             whileHover={{ scale: 1.05 }}
@@ -114,6 +118,8 @@ export function Handlebars({
               zIndex: 10,
             }}
             drag="x"
+            dragElastic={0}
+            dragMomentum={false}
             dragConstraints={{
               left: leftHandle + minWidth,
               right: contentWidth,
@@ -149,4 +155,5 @@ export function Handlebars({
       </div>
     </div>
   );
-};
+}
+
